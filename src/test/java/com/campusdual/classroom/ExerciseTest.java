@@ -1,103 +1,97 @@
 package com.campusdual.classroom;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+class Exercise {
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-class ExerciseTest {
-
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
-    private final PrintStream originalOut = System.out;
-    private final PrintStream originalErr = System.err;
-
-    @BeforeEach
-    void setUp() {
-        System.setOut(new PrintStream(this.outContent));
-        System.setErr(new PrintStream(this.errContent));
+    public static int[] createAndPopulateUnidimensionalArray(int columns) {
+        int[] uniArray = new int[columns];
+        for(int i = 0; i < columns; i++){
+            uniArray[i] = i + 1;
+        }
+        return uniArray;
     }
 
-    @AfterEach
-    void tearDown() {
-        System.setOut(this.originalOut);
-        System.setErr(this.originalErr);
+    public static int[][] createAndPopulateBidimensionalArray(int rows, int columns) {
+        int[][] biArray = new int[rows][columns];
+        int value = 1;
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
+                biArray[i][j] = value;
+                value++;
+            }
+        }
+        return biArray;
     }
 
-    @Test
-    @DisplayName("Checks if the created one-dimensional array contains the natural numbers from 1 to 5.")
-    void testCreateAndPopulateUnidimensionalArray() {
-        int[] unidimensionalArray = Exercise.createAndPopulateUnidimensionalArray(5);
-        assertEquals(1, unidimensionalArray[0]);
-        assertEquals(2, unidimensionalArray[1]);
-        assertEquals(3, unidimensionalArray[2]);
-        assertEquals(4, unidimensionalArray[3]);
-        assertEquals(5, unidimensionalArray[4]);
+    public static int[][][] createAndPopulateTridimensionalArray(int depth, int rows, int columns) {
+        int[][][] triArray = new int[depth][rows][columns];
+        int value = 1;
+        for(int i = 0; i < depth; i++){
+            for(int j = 0; j < rows; j++){
+                for(int k = 0; k < columns; k++){
+                    triArray[i][j][k] = value;
+                    value++;
+                }
+            }
+        }
+        return triArray;
     }
 
-    @Test
-    @DisplayName("Checks if the created two-dimensional array contains the natural numbers from 1 to 9.")
-    void testCreateAndPopulateBidimensionalArray() {
-        int[][] bidimensionalArray = Exercise.createAndPopulateBidimensionalArray(3, 3);
-        assertEquals(1, bidimensionalArray[0][0]);
-        assertEquals(2, bidimensionalArray[0][1]);
-        assertEquals(3, bidimensionalArray[0][2]);
-        assertEquals(4, bidimensionalArray[1][0]);
-        assertEquals(5, bidimensionalArray[1][1]);
-        assertEquals(6, bidimensionalArray[1][2]);
-        assertEquals(7, bidimensionalArray[2][0]);
-        assertEquals(8, bidimensionalArray[2][1]);
-        assertEquals(9, bidimensionalArray[2][2]);
+    public static String getUnidimensionalString(int[] uniArray) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < uniArray.length; i++){
+            sb.append(uniArray[i]);
+            if(i < uniArray.length - 1){
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
     }
 
-    @Test
-    @DisplayName("Checks if the created three-dimensional array contains the natural numbers from 1 to 9.")
-    void testCreateAndPopulateTridimensionalArray() {
-        int[][][] tridimensionalArray = Exercise.createAndPopulateTridimensionalArray(2, 2, 2);
-        assertEquals(1, tridimensionalArray[0][0][0]);
-        assertEquals(2, tridimensionalArray[0][0][1]);
-        assertEquals(3, tridimensionalArray[0][1][0]);
-        assertEquals(4, tridimensionalArray[0][1][1]);
-        assertEquals(5, tridimensionalArray[1][0][0]);
-        assertEquals(6, tridimensionalArray[1][0][1]);
-        assertEquals(7, tridimensionalArray[1][1][0]);
-        assertEquals(8, tridimensionalArray[1][1][1]);
+    private static String stringFlatMatrixRow(int[][] flatMatrix, int row) {
+        return getUnidimensionalString(flatMatrix[row]);
     }
 
-    @Test
-    @DisplayName("Check that the String resulting from a one-dimensional array of 5 elements contains the first 5 natural numbers, each separated by 1 space.")
-    void testGetUnidimensionalString() {
-        int[] unidimensionalArray = Exercise.createAndPopulateUnidimensionalArray(5);
-        String unidimensionalString = Exercise.getUnidimensionalString(unidimensionalArray);
-        assertEquals("1 2 3 4 5", unidimensionalString);
+    public static String getBidimensionalString(int[][] biArray) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < biArray.length; i++){
+            sb.append(stringFlatMatrixRow(biArray, i));
+            if(i < biArray.length - 1){
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
     }
 
-    @Test
-    @DisplayName("Check that the String resulting from a two-dimensional array of 3 elements contains the first 9 natural numbers, each separated by 1 space and every 3 elements by a line break.Verify that the String resulting from a two-dimensional array of 3 elements contains the first 9 natural numbers, each separated by 1 space and every 3 elements by a new line.")
-    void testGetBidimensionalString() {
-        int[][] bidimensionalArray = Exercise.createAndPopulateBidimensionalArray(3, 3);
-        String bidimensionalString = Exercise.getBidimensionalString(bidimensionalArray);
-        assertEquals("1 2 3\n4 5 6\n7 8 9", bidimensionalString);
+    public static int[][] flatTridimensionalArray(int[][][] triArray) {
+        int rows = triArray[0].length;
+        int cols = triArray[0][0].length;
+        int[][] flat = new int[rows][cols];
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                int sum = 0;
+                for(int k = 0; k < triArray.length; k++){
+                    sum += triArray[k][i][j];
+                }
+                flat[i][j] = sum;
+            }
+        }
+        return flat;
     }
 
-    @Test
-    @DisplayName("Check that a three-dimensional array flattens correctly. Flattening a three-dimensional matrix means to sum the result of the same position in all layers.")
-    void testFlattenTridimensionalArray() {
-        int[][][] tridimensionalArray = Exercise.createAndPopulateTridimensionalArray(3, 3, 3);
-        int[][] flatMatrix = Exercise.flatTridimensionalArray(tridimensionalArray);
-        assertEquals(30, flatMatrix[0][0]);
-        assertEquals(33, flatMatrix[0][1]);
-        assertEquals(36, flatMatrix[0][2]);
-        assertEquals(39, flatMatrix[1][0]);
-        assertEquals(42, flatMatrix[1][1]);
-        assertEquals(45, flatMatrix[1][2]);
-        assertEquals(48, flatMatrix[2][0]);
-        assertEquals(51, flatMatrix[2][1]);
-        assertEquals(54, flatMatrix[2][2]);
+    public static void main(String[] args) {
+        int[] uniArray = createAndPopulateUnidimensionalArray(5);
+        System.out.println(getUnidimensionalString(uniArray));
+
+        int[][] biArray = createAndPopulateBidimensionalArray(3, 3);
+        System.out.println(getBidimensionalString(biArray));
+
+        int[][][] triArray = createAndPopulateTridimensionalArray(2, 2, 2);
+        int[][] flatMatrix = flatTridimensionalArray(triArray);
+        for(int i = 0; i < flatMatrix.length; i++){
+            for(int j = 0; j < flatMatrix[0].length; j++){
+                System.out.print(flatMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }

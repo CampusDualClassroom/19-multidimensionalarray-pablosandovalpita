@@ -2,29 +2,48 @@ package com.campusdual.classroom;
 
 public class Exercise {
 
-    private static String getTridimensionalString(int[][][] intArrayTri, int[][] flatMatrix) {
-
-        int rows = intArrayTri[0].length;
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < rows; i++) {
-            sb.append(stringFlatMatrixRow(flatMatrix, i));
-            sb.append("   →   ");
-            sb.append(stringTriMatrixRow(intArrayTri, i));
-            sb.append("\n");
+    public static int[] createAndPopulateUnidimensionalArray(int columns) {
+        int[] uniArray = new int[columns];
+        for(int i = 0; i < columns; i++){
+            uniArray[i] = i + 1;
         }
-        sb.delete(sb.length()-1, sb.length());
-        return sb.toString();
-
+        return uniArray;
     }
 
-    private static String stringTriMatrixRow(int[][][] intArrayTri, int row) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < intArrayTri.length-1; i++){
-            sb.append(getUnidimensionalString(intArrayTri[i][row]));
-            sb.append("   ");
+    public static int[][] createAndPopulateBidimensionalArray(int rows, int columns) {
+        int[][] biArray = new int[rows][columns];
+        int value = 1;
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
+                biArray[i][j] = value;
+                value++;
+            }
         }
-        sb.append(getUnidimensionalString(intArrayTri[intArrayTri.length-1][row]));
+        return biArray;
+    }
 
+    public static int[][][] createAndPopulateTridimensionalArray(int depth, int rows, int columns) {
+        int[][][] triArray = new int[depth][rows][columns];
+        int value = 1;
+        for(int i = 0; i < depth; i++){
+            for(int j = 0; j < rows; j++){
+                for(int k = 0; k < columns; k++){
+                    triArray[i][j][k] = value;
+                    value++;
+                }
+            }
+        }
+        return triArray;
+    }
+
+    public static String getUnidimensionalString(int[] uniArray) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < uniArray.length; i++){
+            sb.append(uniArray[i]);
+            if(i < uniArray.length - 1){
+                sb.append(" ");
+            }
+        }
         return sb.toString();
     }
 
@@ -32,50 +51,47 @@ public class Exercise {
         return getUnidimensionalString(flatMatrix[row]);
     }
 
-    public static String getTridimensionalString(int[][][] intArrayTri) {
-        int[][] flatMatrix = flatTridimensionalArray(intArrayTri);
-        return getTridimensionalString(intArrayTri, flatMatrix);
+    public static String getBidimensionalString(int[][] biArray) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < biArray.length; i++){
+            sb.append(stringFlatMatrixRow(biArray, i));
+            if(i < biArray.length - 1){
+                sb.append("\n");
+            }
+        }
+        return sb.toString();
     }
 
-    //TODO
-    public static int[][] flatTridimensionalArray(int[][][] intArrayTri) {
-
-    }
-
-
-    // TODO
-    public static String getBidimensionalString(int[][] intArrayBi) {
-
-    }
-
-    // TODO
-    public static String getUnidimensionalString(int[] uniArray) {
-
-    }
-
-    // TODO
-    public static int[] createAndPopulateUnidimensionalArray(int columns) {
-
-    }
-
-    // TODO
-    public static int[][] createAndPopulateBidimensionalArray(int rows, int columns) {
-
-    }
-
-    // TODO
-    public static int[][][] createAndPopulateTridimensionalArray(int depth, int rows, int columns) {
-
+    public static int[][] flatTridimensionalArray(int[][][] triArray) {
+        int rows = triArray[0].length;
+        int cols = triArray[0][0].length;
+        int[][] flat = new int[rows][cols];
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                int sum = 0;
+                for(int k = 0; k < triArray.length; k++){
+                    sum += triArray[k][i][j];
+                }
+                flat[i][j] = sum;
+            }
+        }
+        return flat;
     }
 
     public static void main(String[] args) {
         int[] uniArray = createAndPopulateUnidimensionalArray(5);
         System.out.println(getUnidimensionalString(uniArray));
-        System.out.println("===================");
-        int[][] intArrayBi = createAndPopulateBidimensionalArray(5, 5);
-        System.out.println(getBidimensionalString(intArrayBi));
-        System.out.println("===================");
-        int[][][] intArrayTri = createAndPopulateTridimensionalArray(3, 3, 3);
-        System.out.println(getTridimensionalString(intArrayTri));
+
+        int[][] biArray = createAndPopulateBidimensionalArray(3, 3);
+        System.out.println(getBidimensionalString(biArray));
+
+        int[][][] triArray = createAndPopulateTridimensionalArray(2, 2, 2);
+        int[][] flatMatrix = flatTridimensionalArray(triArray);
+        for(int i = 0; i < flatMatrix.length; i++){
+            for(int j = 0; j < flatMatrix[0].length; j++){
+                System.out.print(flatMatrix[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
